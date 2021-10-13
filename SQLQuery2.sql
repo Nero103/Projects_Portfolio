@@ -191,7 +191,7 @@ Order BY
 	1,2
 
 
---TOTAL VACCINATION AGAINST TOTAL POPULATION
+--TOTAL BOOSTERS ADMINISTERED AGAINST TOTAL POPULATION
 Select
 	deaths.continent, deaths.location, deaths.date, deaths.population, vacs.total_boosters,
 	SUM(cast(vacs.total_boosters as INT)) OVER 
