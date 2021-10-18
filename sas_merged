@@ -1,0 +1,65 @@
+install.packages("tidyverse")
+install.packages("skimr")
+install.packages("ggplot2")
+install.packages("readxl")
+install.packages("ggpubr")
+
+library(tidyverse)
+library(skimr)
+library(ggplot2)
+library(readxl)
+library(ggpubr)
+
+daily_activity <- read_xlsx("1082021_daily_activityV5.xlsx")
+sleep <- read_xlsx("1082021_sleepV5.xlsx")
+
+View(sleep)
+
+merged <- merge(x = daily_activity, y = sleep, by = "id", all = TRUE)
+
+head(merged)
+
+mergedV2 <- merged %>%
+select(-activity_date.y) %>%
+na.omit()
+
+das_merged <- as_tibble(mergedV2, row.names = FALSE)
+
+View(das_merged)
+
+summary(das_merged)
+
+cor(das_merged$total_steps, das_merged$total_active_min)
+cor(das_merged$total_active_min, das_merged$sedentary_min)
+cor(das_merged$lightly_active_min, y = das_merged$total_min_asleep)
+
+cor.test(das_merged$total_steps, das_merged$total_active_min, method = "pearson")
+cor.test(das_merged$total_active_min, das_merged$sedentary_min, method = "pearson")
+
+ggscatter(das_merged, x = "total_steps", y = "total_active_min",
+color = "blue", shape = 21, size = 3, add = "reg.line", 
+add.params = list(color = "black", fill = "lightgray"),
+conf.int = TRUE, cor.coef = TRUE,
+cor.coeff.args = list(method = "pearson", label.x = 3, label.sep = "\n"),
+title = "Relationship Between Activity and Steps", 
+xlab = "Total Steps", ylab = "Total Active Minutes")
+
+ggscatter(das_merged, x = "total_active_min", y = "sedentary_min",
+color = "blue", shape = 21, add = "reg.line", add.params = list(color = "black", fill = "lightgray"), 
+conf.int = TRUE, cor.coef = TRUE,
+cor.coeff.args = list(method = "pearson", label.x = 420, label.y = 200,
+label.sep = "\n"),
+title = "Relationship Between Activite and Sedentary Behaviors", 
+xlab = "Total Active Minutes", ylab = "Sedentary Minutes")
+
+ggplot(data = das_merged) +
+geom_smooth(mapping = aes(x = activity_date.x, 
+y = total_active_min, color = "blue"))
+
+install.packages("Rserve")
+library(Rserve)
+
+write.table(das_merged, file = "1092021_das_mergedV2.csv", row.names = FALSE, sep = ",")
+
+
+
