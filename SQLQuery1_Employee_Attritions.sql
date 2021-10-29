@@ -257,7 +257,7 @@ Select
 	*,
 	ROW_NUMBER() OVER (
 		Partition By Age, Gender, JobInvolvement, JobLevel, JobRole, JobSatisfaction,
-		NumCOmpaniesWorked, Over18, OverTime, PercentSalaryHike
+		NumCompaniesWorked, Over18, OverTime, PercentSalaryHike
 		Order By Id
 		) As row_num
 From
