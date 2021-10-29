@@ -8,7 +8,7 @@ From
 
 --------------------------------------------------------------------------------
 
---Date Format Standaradization
+--Date Format Standardization
 
 Select 
 	ConvertedSaleDate,
